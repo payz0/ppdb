@@ -1,4 +1,5 @@
 let express = require('express');
+let jwt		= require('jsonwebtoken');
 let app 	= express();
 let path    = require('path');
 let db 		= require('./database.js');
@@ -10,30 +11,11 @@ let tabel;
 let arr  = [];
 // coba excel
 var xl = require('excel4node');
-var wb = new xl.Workbook();
-var ws = wb.addWorksheet('Sheet 1');
-var style1 = wb.createStyle({
-		  font: {
-		    color: 'blue',
-		    size: 12,
-		  },
-		  alignment: {
-		    wrapText: true,
-		    horizontal: 'center',
-		  },
-		  // numberFormat: '$#,##0.00; ($#,##0.00); -',
-		});
-var style2 = wb.createStyle({
-		  font: {
-		    color: 'black',
-		    size: 14,
-		  },
-		  alignment: {
-		    wrapText: true,
-		    horizontal: 'center',
-		  },
-		  // numberFormat: '$#,##0.00; ($#,##0.00); -',
-		});
+
+// post urutan
+let n = 0 //urutan nopes
+let idscol = 0 //untuk detek id sekolah
+let tahunAjaran = new Date().getFullYear()+"/"+Number(new Date().getFullYear()+1) //tahun ajaran otomatis
 
 function schema(x){
 	switch(x){
@@ -57,84 +39,125 @@ function schema(x){
 	}
 }
 
-// uji coba menghitung jumlah siswa
-// app.get("/", (req, res)=>{
-// 	db.tabelSiswa.countDocuments({},(err,count)=>{
-// 		console.log('jumlah data siswa '+count);
-// 	})
+
+// verifi
+function verifyToken(req,res,next){
+	const bearerHeader = req.headers['authorization']
+	
+	if(typeof bearerHeader  !== 'undefined'){
+		const bearer = bearerHeader.split(' ');
+		const bearerToken = bearer[1];
+		req.token = bearerToken
+		// console.log(bearerHeader)
+		next()
+	}else{
+		// res.sendStatus(403)
+		res.sendFile(__dirname+'/bejo.html')
+	}
+}
+
+// cek token
+// jwt.sign({smp: 'ppdb sekolah kobar'},'ppdbKeys',(err,token)=>{
+// 			console.log(token)
 // })
 
-// tampil data
-app.get('/data/:tabel/:ind?', (req,res)=>{
-	schema(req.params.tabel);
-	if(req.params.tabel == 'admin' || req.params.ind == 999){
-		tabel.find({}, (err, docs)=>{
-			if(err) throw err;
-			res.json(docs);
-		});
+
+// tampil datas
+app.get('/data/:tabel/:ind?/:status?', verifyToken, (req,res)=>{
+	let datas;
+	if(req.params.status == 'regis'){
+		datas = {indexSch:req.params.ind, status:'regis ulang',tahunAjaran:tahunAjaran}
+	}else if(req.params.tabel == 'siswa'){
+		datas = {indexSch:req.params.ind,tahunAjaran:tahunAjaran}
 	}else{
-		tabel.find({indexSch:req.params.ind}, (err, docs)=>{
-			if(err) throw err;
-			res.json(docs);
-		});
+		datas = {indexSch:req.params.ind}
 	}
+	schema(req.params.tabel);
+	jwt.verify(req.token,'ppdbKeys',(err, authData)=>{
+			if(err){
+				res.sendStatus(403)
+			}else{
+				if(req.params.tabel == 'admin' || req.params.ind == 999){
+					tabel.find({}, (err, docs)=>{
+						if(err) throw err;
+						res.json(docs);
+					});
+				}else{
+					tabel.find(datas, (err, docs)=>{
+						if(err) throw err;
+						res.json(docs);
+					});
+				}
+			}
+	})
 })
 
+
 // input data
-app.post('/data/:tabel', (req,res)=>{
+app.post('/data/:tabel', verifyToken,(req,res)=>{
+	//n++
 	schema(req.params.tabel);
-	if(req.params.tabel == 'siswa'){
-		tabel.create(req.body,(err,docs)=>{
-			if(err) throw err;
-			// tabel.countDocuments({},(err,count)=>{ //update nomer peserta increatmen
-				tabel.find({indexSch:docs.indexSch})
-					.sort({NoPes : -1})
-					.limit(1)
-					.exec(function(err, doc){
-				     console.log("nilai akhir : "+doc[0].NoPes);
-					 let urutan = doc[0].NoPes;
-					// if(count >= urutan){
-					// 	tabel.findOneAndUpdate({_id:docs._id},{ $inc: { NoPes: count } },{new:true},(err,docs)=>{
-					// 	if(err) throw err;
-					// 		res.json(docs);
-					// 	})
-					// }else{
-						tabel.findOneAndUpdate({_id:docs._id},{ $inc: { NoPes: urutan + 1 } },{new:true},(err,docs)=>{
+	tabel.countDocuments({indexSch:req.body.indexSch,tahunAjaran:tahunAjaran},(err,count)=>{
+			
+
+		if(idscol != req.body.indexSch && n > count || count > n){
+			idscol = req.body.indexSch
+			n = count + 1
+		}else{
+			n++
+		}
+
+	
+	let data = {...req.body,...{tahunAjaran:tahunAjaran,NoPes:n}}
+	jwt.verify(req.token,'ppdbKeys',(err, authData)=>{
+			if(err){
+				res.sendStatus(403)
+			}else{
+				if(req.params.tabel == 'siswa'){
+					tabel.create(data,(err,docs)=>{
 						if(err) throw err;
-							res.json(docs);
-						})
-					// }	
-				})	
-			// })
-			console.log('berhasil tambah');
+						res.json(docs);
+					})
+				}else{
+					tabel.create(data,(err,docs)=>{
+						if(err) throw err;
+						res.json(docs);
+					})
+				}
+			}
 		})
-	}else{
-		tabel.create(req.body,(err,docs)=>{
-			if(err) throw err;
-			res.json(docs);
-			console.log('berhasil tambah '+docs);
-		})
-	}
-	console.log(req.body);
+	})
 })
 
 // edit data
-app.put('/data/:tabel/:id', (req,res)=>{
+app.put('/data/:tabel/:id', verifyToken, (req,res)=>{
 	schema(req.params.tabel);
-	tabel.findOneAndUpdate({_id:req.params.id},{$set:req.body},{new:true},(err,docs)=>{
-		if(err) throw err;
-		res.json(docs);
-		console.log('berhasil update ');
+	jwt.verify(req.token,'ppdbKeys',(err, authData)=>{
+			if(err){
+				res.sendStatus(403)
+			}else{
+				tabel.findOneAndUpdate({_id:req.params.id},{$set:req.body},{new:true},(err,docs)=>{
+					if(err) throw err;
+					res.json(docs);
+					console.log('berhasil update ');
+				})
+			}
 	})
 })
 
 // hapus data
-app.delete('/data/:tabel/:id', (req,res)=>{
+app.delete('/data/:tabel/:id', verifyToken,(req,res)=>{
 	schema(req.params.tabel);
-	tabel.findOneAndDelete({_id:req.params.id}, (err,docs)=>{
-		if(err) throw err;
-		res.json(docs);
-		// console.log('delete '+docs);
+	jwt.verify(req.token,'ppdbKeys',(err, authData)=>{
+			if(err){
+				res.sendStatus(403)
+			}else{
+				tabel.findOneAndDelete({_id:req.params.id}, (err,docs)=>{
+					if(err) throw err;
+					res.json(docs);
+					// console.log('delete '+docs);
+				})
+			}
 	})
 })
 
@@ -171,78 +194,115 @@ app.post("/upload/:tabel/:field/:id/:gambar", (req, res)=>{ //
   let url;
   let namaFile;
   let dats;
-  let field 	= req.params.field;
-  let gambar	= req.params.gambar;
-  let file 		= req.files.image;
-  let id 		= req.params.id;
-  let extensi   = path.extname(file.name);
+ 
 
-  if(gambar == 'profil'){
-  	namaFile = 	field+"-ppdb"+extensi.replace(/\s+/g, '');
-  	url		 = "./app/assets/images/";
-  	if(field == 'latar'){
-  		dats = {latar:namaFile};
-  	}else{
-  		dats = {logo:namaFile};
-  	}
-  }else if(gambar == 'fotoSiswa'){
-  	namaFile = "Foto_"+id+extensi.replace(/\s+/g, '');//new Date()+id+file.name.replace(/\s+/g, '');
-  	url		 = "./app/assets/foto/";
-  	dats 	 = {UpFoto:namaFile};
-  }else{
-  	namaFile = "Sertifikat_"+id+extensi.replace(/\s+/g, '');//new Date()+id+file.name.replace(/\s+/g, '');
-  	url		 = "./app/assets/sertifikat/";
-  	dats 	 = {UpSertifikat:namaFile};
-  }
+  if(req.files.image !== null){
+	  let tgl  		= new Date();
+	  let field 	= req.params.field;
+	  let gambar	= req.params.gambar;
+	  let file 		= req.files.image;
+	  let id 		= req.params.id;
+	  let extensi   = path.extname(file.name);
+	  if(gambar == 'profil'){
+	  	namaFile = 	field+"-ppdb"+tgl+extensi.replace(/\s+/g, '');
+	  	url		 = "./app/assets/images/";
+	  	if(field == 'latar'){
+	  		dats = {latar:namaFile};
+	  	}else{
+	  		dats = {logo:namaFile};
+	  	}
+	  }else if(gambar == 'fotoSiswa'){
+	  	namaFile = "Foto_"+id+extensi.replace(/\s+/g, '');//new Date()+id+file.name.replace(/\s+/g, '');
+	  	url		 = "./app/assets/foto/";
+	  	dats 	 = {UpFoto:namaFile};
+	  }else{
+	  	namaFile = "Sertifikat_"+id+extensi.replace(/\s+/g, '');//new Date()+id+file.name.replace(/\s+/g, '');
+	  	url		 = "./app/assets/sertifikat/";
+	  	dats 	 = {UpSertifikat:namaFile};
+	  }
 
-  // "./app/assets/temp/"
-  file.mv("./tempe/"+namaFile, function(err){
-    if(err){
-      console.log("ada kesalahan "+err);
-    }else{
-      console.log("sukses upload" + namaFile);
-      	// if(field == "latar"){
-	        tabel.findOneAndUpdate({_id:id},{$set:dats},{new:true},(error,docs)=>{
-	          if(error){
-	            console.log('gagal update foto');
-	          }else{
-	            // res.json(docs);
-	            console.log('berhasil update foto ');
-	            if(gambar == 'fotoSiswa'){  //jika foto bukan punyaa admin
-	            	compressFile(namaFile,url, setTimeout(()=>{res.json(docs)},1000))
-	            }else{
-	            	file.mv(url+namaFile,(err)=>{
-	            		if(err) throw err;
-	            		setTimeout(()=>{res.json(docs)},1000)
-	            		fs.readdir('./tempe',(errs, fileses)=>{
-							if(errs) throw errs;
-							for(const filed of fileses){
-								if(filed == namaFile){
-									setTimeout(()=>{
-										fs.unlinkSync("./tempe/"+filed, (err)=>{
-											if(err) throw err;
-										console.log('terhapus')
-									})
+	  // "./app/assets/temp/"
+	  file.mv("./tempe/"+namaFile, function(err){
+	    if(err){
+	      console.log("ada kesalahan "+err);
+	    }else{
+	      // console.log("sukses upload" + namaFile);
+	      	// if(field == "latar"){
+		        tabel.findOneAndUpdate({_id:id},{$set:dats},{new:true},(error,docs)=>{
+		          if(error){
+		            console.log('gagal update foto');
+		          }else{
+		            // res.json(docs);
+		            // console.log('berhasil update foto ');
+		            if(gambar == 'fotoSiswa'){  //jika foto bukan punyaa admin
+		            	compressFile(namaFile,url, setTimeout(()=>{res.json(docs)},1000))
+		            }else{
+		            	file.mv(url+namaFile,(err)=>{
+		            		if(err) throw err;
+		            		setTimeout(()=>{res.json(docs)},1000)
+		            		fs.readdir('./tempe',(errs, fileses)=>{
+								if(errs) throw errs;
+								for(const filed of fileses){
+									if(filed == namaFile){
+										setTimeout(()=>{
+											fs.unlinkSync("./tempe/"+filed, (err)=>{
+												if(err) throw err;
+											// console.log('terhapus')
+										})
 
-									},1000);
+										},1000);
+									}
 								}
-							}
-						})
-	            	})
-	            }
-	          }
-	        });
-    }
-  });
+							})
+		            	})
+		            }
+		          }
+		        });
+	    }
+	  });
+	}else{
+		console.log('gambar gak ada')
+	}
 })
 
 // route untuk download excel
-app.get('/asdAsadD322nsdk2213sDSsdf3sdfsd/:tabel/:ind',(req,res)=>{
+app.get('/asdAsadD322nsdk2213sDSsdf3sdfsd/:tabel/:ind/:status?',(req,res)=>{
 	let baris = 3;
 	let dataAdmin;
+	let DataStatus;
+	if(req.params.status == 'regis'){
+		DataStatus = {indexSch:req.params.ind, status:'regis ulang',tahunAjaran:tahunAjaran}
+	}else{
+		DataStatus = {indexSch:req.params.ind,tahunAjaran:tahunAjaran}
+	}
 	schema(req.params.tabel);
 
-	tabel.find({indexSch:req.params.ind},(err,docs)=>{
+	var wb = new xl.Workbook();
+	var ws = wb.addWorksheet('Sheet 1');
+	var style1 = wb.createStyle({
+			  font: {
+			    color: 'blue',
+			    size: 12,
+			  },
+			  alignment: {
+			    wrapText: true,
+			    horizontal: 'center',
+			  },
+			  // numberFormat: '$#,##0.00; ($#,##0.00); -',
+			});
+	var style2 = wb.createStyle({
+			  font: {
+			    color: 'black',
+			    size: 14,
+			  },
+			  alignment: {
+			    wrapText: true,
+			    horizontal: 'center',
+			  },
+			  // numberFormat: '$#,##0.00; ($#,##0.00); -',
+			});
+
+	tabel.find(DataStatus,(err,docs)=>{
 		if(err) throw err;
 
 		ws.cell(baris,1).string('No');
@@ -286,7 +346,7 @@ app.get('/asdAsadD322nsdk2213sDSsdf3sdfsd/:tabel/:ind',(req,res)=>{
 			ws.cell(baris,19+dots.length).string('Status Daftar');
 			ws.cell(baris,20+dots.length).string('Status Lulus');
 			// isi data perbaris
-			for(let i = 0; docs.sort((a,b)=>{return b.konfirm - a.konfirm || a.jarak - b.jarak }).length > i ; i++){
+			for(let i = 0; docs.sort((a,b)=>{return b.konfirm - a.konfirm || b.total - a.total || a.jarak - b.jarak }).length > i ; i++){
 				ws.cell(i+baris+1,1).number(i+1).style(style1);
 				ws.cell(i+baris+1,2).number(docs[i].NoPes).style({numberFormat:'000'});
 				ws.cell(i+baris+1,3).string(docs[i].nama).style(style1);
@@ -354,10 +414,48 @@ app.get('/asdAsadD322nsdk2213sDSsdf3sdfsd/:tabel/:ind',(req,res)=>{
 				// 	console.log(sekolah[0].kuota)
 			}
 		
-			wb.write('Excel.xlsx', res);
+			wb.write('Excel_'+Math.floor(Math.random()*10000)+'.xlsx', res);
 			}) // tutup tabel admin
 		}) // tutup tabel dinamis
 	}) //tutup tabel pertama
 })
+
+
+app.post("/uploadKelulusan/:tabel/:id/:untuk", (req, res)=>{ //
+  schema(req.params.tabel);
+  let namaFile;
+  let dat
+  let r = Math.random().toString(36).substring(7);
+
+  if(req.params.untuk == 'foto'){
+  	dat = {foto:namaFile}
+  }else if(req.params.untuk == 'nilai'){
+  	dat = {nilai:namaFile}
+  }else{
+  	dat = {info:namaFile}
+  }
+  if(req.files.image !== null){
+	  let id 		= req.params.id;
+	  let extensi   = path.extname(file.name);
+	  namaFile = r+id+extensi.replace(/\s+/g, '')
+	  file.mv("./kelulusan/"+namaFile, function(err){
+	    if(err){
+	      console.log("ada kesalahan "+err);
+	    }else{
+		        tabel.findOneAndUpdate({_id:id},{$set:dat},{new:true},(error,docs)=>{
+		          if(error){
+		            console.log('gagal update foto');
+		          }else{
+		          	res.json(docs)
+		           console.log('update data')
+		          }
+		        });
+	    }
+	  });
+	}else{
+		console.log('gambar gak ada')
+	}
+})
+
 
 module.exports = app;

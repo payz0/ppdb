@@ -1,7 +1,11 @@
 let mongoose = require('mongoose');
 
 mongoose.connect("mongodb://localhost:27017/ppdb",
-	{ useNewUrlParser: true },
+	{ 
+		useNewUrlParser: true,  
+	 	useUnifiedTopology: true,
+	 	useFindAndModify: false
+	},
 	(err)=>{
 			if(err){
 				console.log("not connect db");
@@ -10,7 +14,7 @@ mongoose.connect("mongodb://localhost:27017/ppdb",
 			}
 	});
 
-mongoose.set('useFindAndModify', false); //untuk menghilangkan warning saat update
+// mongoose.set('useFindAndModify', false); //untuk menghilangkan warning saat update
 
 let schSiswa = mongoose.Schema({
 				NoPes:{type:Number,default:0},
@@ -36,6 +40,9 @@ let schSiswa = mongoose.Schema({
 				tgl_reg:Date,
 				indexSch:Number,
 				otherSch:Number,
+				status:String,
+				tahunAjaran:String,
+				ket:String,
 			},{strict:false})
 
 let schField = mongoose.Schema({
@@ -63,6 +70,7 @@ let schAdmin = mongoose.Schema({
 			   kuota:Number,
 			   open:Boolean,
 			   koordinat:String,
+			   reg_ulang:Boolean,
 			   warna:String
 })
 

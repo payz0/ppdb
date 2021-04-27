@@ -1,11 +1,16 @@
+
 let express 	= require('express');
 let server 		= express();
 let bodyParser 	= require('body-parser');
 let cors		= require('cors');
-let app 		= require('http').createServer(server);
-let io 			= require('socket.io').listen(app);
-let router  	= require('./router.js')
-let port		= 8000;
+let fs 			= require('fs');
+let path		= require('path');
+let app 		= require('http').createServer(server)
+let ios 		= require('socket.io').listen(app);
+let router  	= require('./router.js');
+let portHttp 	= 38702;
+let portHttps	= 38701;
+let portLocal	= 8001;
 let upload		= require('express-fileupload');
 
 server.use(cors());
@@ -14,40 +19,35 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended:true}));
 server.use('/', router);
 server.use(express.static(__dirname+'/app/assets'));
-server.use(express.static(__dirname+'/app'));
-server.get('*', (req, res)=>{
-	res.sendFile(__dirname+"/app/index.html");
-})
+app.listen(portLocal,()=>{console.log('server http di port '+portLocal)});
 
-app.listen(port,()=>{console.log('server di port '+port)});
-
-io.on('connection',(socket)=>{
+ios.on('connection',(socket)=>{
 	console.log('user connected');
 	socket.on('nambah siswa',(data)=>{
-		io.emit('nambah array',data);
+		ios.emit('nambah array',data);
 	})
 
 	socket.on('rubah profil',(data)=>{
-		io.emit('profil berubah',data);
+		ios.emit('profil berubah',data);
 	})
 
 	socket.on('chat kirim',(chat)=>{
-		io.emit('chat terima', chat);
+		ios.emit('chat terima', chat);
 	})
 
 	socket.on('new chater',(data)=>{
-		io.emit('login guest', data);
+		ios.emit('login guest', data);
 	})
 
 	socket.on('guest logout',(data)=>{
-		io.emit('cekout', data);	
+		ios.emit('cekout', data);	
 	})
 
 	socket.on('nambah',(data)=>{
-		io.emit('tambah', data);	
+		ios.emit('tambah', data);	
 	})
 	socket.on('edit nilai',(data)=>{
-		io.emit('refresh', data);
+		ios.emit('refresh', data);
 	})
 	// log out
 	socket.on('disconnect',()=>{
