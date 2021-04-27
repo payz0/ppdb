@@ -1,0 +1,41 @@
+.status h4{
+    text-shadow: 2px 2px 4px #2b0909;
+    color: rgb(34, 251, 255);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 25pt;
+    background: rgba(128, 128, 128, 0.2196078431372549);
+    padding: 15px;
+    width: max-content;
+}
+
+.status{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hasil-info{
+    background: rgba(246, 246, 246, 0.83);
+    padding: 20px;
+    text-align: justify;
+    border: 5px solid rgb(235, 241, 247);
+}
+
+.hasil-info::after{
+ content: '';
+ background-image: url(http://localhost:8001/note.jpg);
+ /* opacity: .3; */
+ top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;  
+}
+.kop{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px double;
+}

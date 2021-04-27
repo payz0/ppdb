@@ -1,0 +1,37 @@
+			<!-- *ngIf="!_datas.homeTrue" -->
+			<div class="container-fluid" >	
+				<!-- <div >
+					<app-form-daftar></app-form-daftar>
+				</div> -->
+				<!-- <b  class="btn btn-secondary btn-sm">Daftar Peserta</b>  -->
+				<input type="text" class="form-control" [(ngModel)]="cari.nama" placeholder="Cari Nama" style="float: right;width: 50%;">
+				<label  style="float: right;
+				background: rgb(63, 82, 138);
+				padding: 6px 10px;
+				margin-top: 2px;
+				color: white;
+				font-size: 10pt;"><i class="fa fa-search"></i></label>	
+				<div class="hidden-print">
+					<div class="content" style="height: 80vh">
+						<div class=" animated bounceInRight" *ngFor="let data of siswas | filterBy:cari; let i = index" style="position: relative"
+						(click)="cetakKartu(data)" [ngClass]="data.konfirm ? 'bg-custom' :'list-siswa'"> 
+							<img src="{{_datas.baseUrl}}/foto/{{data.UpFoto}}" alt="" *ngIf="data.UpFoto != null || data.UpFoto != undefined">
+							<img src="{{_datas.baseUrl}}/default-man.png" alt="" *ngIf="data.UpFoto == null || data.UpFoto == undefined">
+							
+								<div class="nopes"> No. {{data.NoPes | number:'3.0-2'}} </div>
+								<div>
+									<b>{{ (lebarLayar < 600 && data.nama?.length > 8) ? (data.nama| uppercase | slice:0:6)+'...' : (data.nama| uppercase) }}</b>
+								</div>
+								<img src="{{_datas.baseUrl}}/winner.png"  *ngIf="data.UpSertifikat != undefined">
+								<span style="margin-left: 10px;" class="asalSekolah">
+									dari <i> {{(lebarLayar < 750 && data.sekolah?.length > 8) ? (data.sekolah | slice:0:6)+'..' : (data.sekolah) }} </i>
+								</span>
+								<!-- <br> -->
+								
+								<i class="fas badge badge-pill badge-primary" *ngIf="data.konfirm"> {{ lebarLayar < 550 ? '&#xf058;':'&#xf058; Complete'}}</i>
+								<i class="fas badge badge-pill badge-danger" *ngIf="!data.konfirm"> {{ lebarLayar < 550 ? '&#xf05a;':'&#xf05a; Proses'}}</i>
+						</div>
+					</div>
+			
+				</div>
+			</div>

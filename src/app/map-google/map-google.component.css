@@ -1,0 +1,10 @@
+agm-map{
+	height:85vh;
+	/*width:600px;*/
+	margin: 0 auto;
+	/*position: fixed;*/
+}
+
+canvas{
+	    height: 85vh !important;
+}

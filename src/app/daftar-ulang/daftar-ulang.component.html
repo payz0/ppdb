@@ -1,0 +1,171 @@
+<h6 style="text-align: center">
+	<img [attr.src]="foto" style="width: 80px"> <br>
+	{{_datas.sekolah.sekolah | uppercase}} <br>
+	<i style="font-size:8pt">{{_datas.sekolah.alamat}}</i> <br>
+	Formulir Daftar Ulang <br> No. Peserta {{getSiswa.NoPes | number:'3.0-2'}}
+</h6>
+<div class="back-cek" *ngIf="!cekError">
+	<div class="cek animated bounceInDown col-md-4 col-xs-12" *ngIf="_datas.sekolah.reg_ulang">
+		<input type="text" [(ngModel)]="cek.nopes" placeholder="No Peserta" class="form-control">
+		<input type="text" [(ngModel)]="cek.nisn" placeholder="NISN Siswa" class="form-control">
+		<button type="button" class="btn btn-warning btn-sm" (click)="dataSiswa(cek)">Daftar Ulang</button>
+	</div>
+	<div style="font-style: italic;
+    padding: 8px;
+    color: steelblue;">
+		Form ini hanya untuk siswa pendaftaran ulang yang sebelumnya sudah di nyatakan lulus atau di terima di sekolah {{_data.sekolah.sekolah}}.
+		Semua form yang ada di dalam formulir harus di isi. <span *ngIf="!_datas.sekolah.reg_ulang">Saat ini form sedang di tutup oleh admin sampai jadwal daftar ulang di mulai</span>
+	</div>
+</div>
+<table class="table" *ngIf="cekError">
+	<tbody>
+		<!-- <tr>
+			<td style="width: 20%" >No Peserta</td><td>:</td>
+			<td>
+				<span *ngIf="editIndex != 10">
+					{{getSiswa.NoPes}}
+				</span>
+				<span *ngIf='editIndex == 10'>
+					<input type="number" [(ngModel)]="getSiswa.NoPes" class="form-control" placeholder="Nomor peserta siswa" (focusout)="out_nopes()">
+				</span>
+			</td>
+			
+			<td style="width: 5%" class="no-print"><button type="button" class="btn btn-sm" style="float: right;padding:0px" (click)="editSiswa(10)"><i class="fas">&#xf044;</i> 
+			</button>  </td>
+		</tr> -->
+		<tr>
+			<td style="width: 20%" >Nama Siswa</td><td>:</td>
+			<td>
+				<span *ngIf="editIndex != 1">
+					{{getSiswa.nama}}
+				</span>
+				<span *ngIf='editIndex == 1'>
+					<input type="text" [(ngModel)]="getSiswa.nama" class="form-control" placeholder="nama siswa">
+				</span>
+			</td>
+			
+			<td style="width: 5%" class="no-print"><button type="button" class="btn btn-sm" style="float: right;padding:0px" (click)="editSiswa(1)"><i class="fas">&#xf044;</i> 
+			</button>  </td>
+		</tr>
+		<tr>
+			<td>TTL</td><td>:</td>
+
+			<td>
+				<span *ngIf="editIndex != 2">
+					{{getSiswa.tempat}},{{getSiswa.tgl | date: 'dd MMMM yyyy'}}
+				</span>
+				<span *ngIf='editIndex == 2'>
+					<input type="text" [(ngModel)]="getSiswa.tempat" class="form-control" placeholder="tempat lahir" style="width: 40%; float: left;">
+					<input type="date" [(ngModel)]="getSiswa.tgl" class="form-control" placeholder="tgl lahir" style="width: 40%">
+				</span>
+
+			</td>
+
+			<td style="width: 5%" class="no-print"><button type="button" class="btn btn-sm" style="float: right;padding:0px" (click)="editSiswa(2)"><i class="fas">&#xf044;</i> 
+			</button>  </td>
+		</tr>
+		<tr>
+			<td>Jenis Kelamin</td><td>:</td>
+			<td>{{getSiswa.sex}}</td>
+		</tr>
+		<tr>
+			<td>NISN</td><td>:</td>
+			<td>
+				
+				<span *ngIf="editIndex != 7">
+				{{getSiswa.nisn}}
+				</span>
+				<span *ngIf='editIndex == 7'>
+					<input type="text" [(ngModel)]="getSiswa.nisn" class="form-control" placeholder="nisn">
+				</span>
+			</td>
+			<td style="width: 5%" class="no-print"><button type="button" class="btn btn-sm" style="float: right;padding:0px" (click)="editSiswa(7)"><i class="fas">&#xf044;</i> 
+			</button>  </td>
+		</tr>
+		<tr>
+			<td>Handphone</td><td>:</td>
+			<td>
+				<span *ngIf="editIndex != 3">
+				{{getSiswa.hp}}
+				</span>
+				<span *ngIf='editIndex == 3'>
+					<input type="text" [(ngModel)]="getSiswa.hp" class="form-control" placeholder="tempat lahir">
+				</span>
+			</td>
+
+			<td style="width: 5%" class="no-print"><button type="button" class="btn btn-sm" style="float: right;padding:0px" (click)="editSiswa(3)"><i class="fas">&#xf044;</i> 
+			</button>  </td>
+		</tr>
+		<tr>
+			<td>Sekolah Asal</td><td>:</td>
+			<td>
+				<span *ngIf="editIndex != 4">
+					{{getSiswa.sekolah}}
+				</span>
+				<span *ngIf='editIndex == 4'>
+					<input type="text" [(ngModel)]="getSiswa.sekolah" class="form-control" placeholder="tempat lahir">
+				</span>
+			</td>
+
+			<td style="width: 5%" class="no-print"><button type="button" class="btn btn-sm" style="float: right;padding:0px" (click)="editSiswa(4)"><i class="fas">&#xf044;</i> 
+			</button>  </td>
+		</tr>
+		<tr>
+			<td>Alamat</td><td>:</td>
+			<td>
+				<span *ngIf="editIndex != 5">
+					{{getSiswa.alamat}}
+				</span>
+				<span *ngIf='editIndex == 5'>
+					<input type="text" [(ngModel)]="getSiswa.alamat" class="form-control" placeholder="tempat lahir">
+				</span>
+			</td>
+
+			<td style="width: 5%" class="no-print"><button type="button" class="btn btn-sm" style="float: right;padding:0px" (click)="editSiswa(5)"><i class="fas">&#xf044;</i> 
+			</button>  </td>
+		</tr>
+		<tr>
+			<td>Agama</td><td>:</td>
+			<td>
+				<span *ngIf="editIndex != 6">
+				{{getSiswa.agama}}
+				</span>
+				<span *ngIf='editIndex == 6'>
+					<input type="text" [(ngModel)]="getSiswa.agama" class="form-control" placeholder="tempat lahir">
+				</span>
+			</td>
+
+			<td style="width: 5%" class="no-print"><button type="button" class="btn btn-sm" style="float: right;padding:0px" (click)="editSiswa(6)"><i class="fas">&#xf044;</i> 
+			</button>  </td>
+		</tr>
+		<tr *ngFor = "let f of fields" >
+			<td [ngClass]="!siapCetak ? 'inputan':''" >{{f.field_attr}}</td>
+			<td [ngClass]="!siapCetak ? 'inputan':''">:</td>
+			<td [ngClass]="!siapCetak ? 'inputan':''">
+				<span *ngIf="siapCetak">
+					{{getSiswa[f.field_db]}}
+				</span>
+				<span *ngIf="!siapCetak">	
+					<input class="form-control" type="text" [(ngModel)]="getSiswa[f.field_db]">
+				</span>
+			</td>
+		</tr>
+		<tr class="no-print">
+			<td></td>
+			<td></td>
+			<td style="text-align: right;">
+				<button type="button" class="btn btn-sm btn-danger" (click)="kirim()" *ngIf="!siapCetak">Kirim</button>
+				<button type="button" class="btn btn-sm btn-primary" (click)="cetak()" *ngIf="siapCetak">Cetak Bukti Formulir</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div class="print">
+	{{_datas.sekolah.kota}}, {{tanggal | date: 'dd MMMM yyyy'}} <br>
+	tertanda <br><br>
+	{{getSiswa.nama}}
+</div>
+
+
+

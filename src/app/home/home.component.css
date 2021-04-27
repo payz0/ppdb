@@ -1,0 +1,127 @@
+@page { size:8.5in 13in; margin: 4cm }
+
+.list-siswa img, .bg-custom img {
+    /* width: 65px;
+    height: 75px;
+    border: 1px solid white; */
+    width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.list-siswa .badge-pill, .bg-custom .badge-pill{
+    position: absolute;
+    right: 5px;
+}
+
+.list-siswa .nopes, .bg-custom .nopes{
+    margin-right: 10px;
+    background: rgb(220, 53, 69);
+    color: white;
+    border-radius: 5px;
+    padding: 0px 5px;
+    font-size: 9pt;
+}
+
+.bg-custom .nopes{
+    background: rgb(88, 133, 184);
+}
+
+.list-siswa,.bg-custom {
+    background-color:rgba(203, 203, 203, 0);
+    padding: 4px;
+    /* rgb(133, 140, 133); */
+    /* color: white;
+    padding: 6px;
+    width:  max-content;
+    float: left;
+    margin: 1px;
+    border: 1px outset rgb(210, 210, 210);
+    transition: all 600ms;
+    font-size: 8pt; */
+    color: black;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    border: 1px solid rgb(195, 195, 195);
+    font-size: 10pt;
+    margin: 2px;
+}
+.list-siswa:hover, .bg-custom:hover{
+    background-color:rgba(49, 128, 184, 0.15);
+     /* black; */
+    cursor: pointer;
+}
+
+/* .bg-custom img{
+    width: 65px;
+    height: 75px;
+    border: 1px solid white;
+} */
+
+.bg-custom{
+   background-color:rgba(164, 170, 178, 0.18);
+    /* color: white; */
+    /* background-color: rgb(236, 236, 236);
+    color: rgb(64, 5, 5);
+    padding: 6px;
+    width:  max-content;
+    float: left;
+    margin: 1px;
+    border: 1px outset rgb(210, 210, 210);
+    transition: all 600ms;
+    font-size: 8pt; */
+}
+
+/* .bg-custom:hover{
+    background-color: black;
+    cursor: pointer;
+    color: white;
+} */
+
+.list-siswa b{
+    vertical-align: top;
+}
+
+/*home css*/
+.badan-modal{
+    z-index: 99;
+    width: 100%;
+    height: 100vh;
+    padding: 3%;
+   
+}
+
+.img-home2{
+    width: 101.6%;
+    height: 57vh;
+    margin: -10px -10px auto;
+    /*margin-bottom: 12%;*/
+}
+
+  .textSekolah{
+    color: rgb(25, 33, 167);
+    position: absolute;
+    left: 0;
+    bottom: 100px;
+    text-shadow: 1px 4px 3px #676666;
+    font-family: serif;
+    padding: 8px;
+    font-size: 23pt;
+    background-color: rgba(174, 189, 187, 0.81);
+    text-align: center;
+    width: 100%;
+  }
+  
+  .textAlamat{
+    position: absolute;
+    color: black;
+    padding: 10px;
+    line-height: 5pt !important;
+    bottom: 25px;
+    text-align: center;
+    width: 100%;
+  }

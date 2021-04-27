@@ -1,0 +1,178 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark " [ngClass]="_datas.sekolah.warna" *ngIf="!_datas.maenHackel">
+  <a class="navbar-brand" href="#" (click)="_datas.homeTrue = true; routing = 'reg'; btnActived = ''">
+      <h3 style="display: grid;padding: 5px 35px 5px 40px;text-align: center;">
+        <b style="text-shadow: 2px 2px black;font-family: Bernard MT Condensed;">PPDB</b>
+        <span style="    font-size: 8pt;">
+         {{_datas.sekolah.sekolah}}
+        </span>
+      </h3>
+  </a>
+    <!-- <span >{{_datas.sekolah.sekolah}}</span> -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse " id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto ">
+      <li class="nav-item" [ngClass] = "routing == 'info' ? 'active':'' ">
+        <a class="nav-link" href="#" (click)="tujuan('info')">Info</a>
+      </li>
+      <li class="nav-item" [ngClass] = "btnActived">
+        <a class="nav-link" href="#" (click)="tujuan('reg');">Formulir<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item" [ngClass] = "routing == 'daftar' ? 'active':'' ">
+        <a class="nav-link" href="#" (click)="tujuan('daftar')">Daftar Peserta</a>
+      </li>
+      <li class="nav-item" [ngClass] = "routing == 'seleksi' ? 'active':'' ">
+        <a class="nav-link" href="#" (click)="tujuan('seleksi')">Hasil Seleksi</a>
+      </li>
+      <!-- <li class="nav-item" [ngClass] = "routing == 'ulang' ? 'active':'' ">
+        <a class="nav-link" href="#" (click)="tujuan('ulang')">Registrasi Ulang</a>
+      </li> -->
+      
+      
+      <!-- <li class="nav-item" [ngClass] = "routing == 'tanya' ? 'active':'' ">
+        <a class="nav-link" href="#" (click)="tujuan('tanya')">Tanya Jawab</a>
+      </li> -->
+<!--       <li class="nav-item" [ngClass] = "routing == 'about' ? 'active':'' ">
+        <a class="nav-link" href="#" (click)="tujuan('about')">About</a>
+      </li> -->
+      <li class="nav-item" [ngClass] = "routing == 'setting' ? 'active':'' ">
+        <a class="nav-link" href="#" (click)="tujuan('setting')">Login</a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+  
+<!-- ini versi switch -->
+<div class="isi-modal" [ngSwitch]="routing" *ngIf="!_datas.homeTrue">
+	<div class="switch_route" *ngSwitchCase="'reg'" >
+		<app-form-daftar *ngIf="!_datas.maenHackel"></app-form-daftar>
+  </div>
+  <div class="switch_route animated fadeIn" *ngSwitchCase="'daftar'" >
+    <app-home></app-home>
+  </div>
+  <!-- <div class="switch_route animated bounceInDown" *ngSwitchCase="'ulang'" >
+    <app-daftar-ulang></app-daftar-ulang>
+  </div> -->
+  <div class="switch_route animated bounceInDown" *ngSwitchCase="'seleksi'" >
+    <app-seleksi></app-seleksi>
+  </div>
+	<div class="switch_route animated fadeIn" *ngSwitchCase="'info'" >
+		<app-info></app-info>
+	</div>
+	<!-- <div class="switch_route animated bounceInRight" *ngSwitchCase="'tanya'" >
+		<app-tanya></app-tanya>
+	</div>
+  <div class="switch_route animated bounceInDown" *ngSwitchCase="'about'" >
+    <app-about></app-about>
+  </div> -->
+	<div class="animated bounceInUp" *ngSwitchCase="'setting'" style="margin-top: 20px">
+		<app-setting></app-setting>
+	</div>
+</div>
+
+<!-- background -->
+<div class="badan-modal"  *ngIf="!_datas.homeTrue">
+	<div style="margin-top:40px" >
+      <img class="img-home" [attr.src]="latar"  style="height: 8rem">
+      <h2 class="textSekolah">{{_datas.sekolah.sekolah}}</h2>
+	</div>
+</div>
+
+
+
+  <div class="col" *ngIf="_datas.homeTrue">
+        <div class="row" style="    height: 100vh;">
+              <img style="width: 100%;height: 64vh;" [attr.src]="_datas.baseUrl+'/images/'+_datas.sekolah.latar" *ngIf="_datas.sekolah.latar != undefined">
+              <div [ngClass]="_datas.sekolah.warna" 
+              style="background: linear-gradient(rgb(71, 125, 185),rgb(5, 7, 35));    
+              width: 100%;color: white;box-shadow: -3px 0px 8px 6px #232323;border-top: 1px inset white;font-size: 9pt;padding-bottom: 90px;">
+                  <div style="font-family: Bernard MT Condensed;text-align: center;
+                          width: 100%;color: white;">
+                      <h2 style="text-shadow: 4px 4px 3px rgb(0, 0, 0);color: rgb(255, 255, 255);">{{_datas.sekolah.sekolah}}</h2>
+                      <h4>{{_datas.sekolah.provinsi}} - {{_datas.sekolah.kota}}</h4>
+                      <p>{{_datas.sekolah.alamat}}</p>
+                  </div>
+                  <hr style="background-color: rgb(58, 58, 58);">
+                  <div class="row col-sm-12">
+                    <div class="col-sm-5">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <ul class="list">
+                            <li><a href="#" (click)="tujuan('reg')"> Pendaftaran </a></li>
+                            <li><a href="#" (click)="tujuan('info')"> Info PPDB </a></li>
+                            <!-- <li><a href="#" (click)="tujuan('tanya')"> Chat  </a></li> -->
+                            <li><a href="#" (click)="tujuan('setting')"> Login </a></li>
+                          </ul>
+                        </div>
+                        <div class="col-sm-6">
+                          <!-- <b>Video Cara Daftar</b><br>
+                          <img [attr.src]="video" alt="" style="width: 40%;cursor:pointer;" (click)="playVid()"> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-7">
+                    <p style="padding: 2px 30px">
+                      {{_datas.sekolah.informasi}}
+                    </p>
+                    </div>
+                  </div>
+                  
+              </div>
+        </div>
+  </div>
+
+  <!-- video -->
+<div class="playVideo col-sm-6 animated bounceInDown" *ngIf="playVideo">
+  <div class="headline">
+    Video cara daftar online
+    <span (click)="playVid()"> <i style="float: right;
+    font-size: 19pt;
+    color: #0e0e84;
+    cursor: pointer;" class="fas">&#xf410;</i> </span>
+  </div>
+  <div class="videoIsi">
+      <iframe  width="100%" height="100%" src="https://www.youtube.com/embed/-WIIKKoBg-Y?autoplay=1" frameborder="0" allow='autoplay'></iframe>
+  </div>
+</div>
+
+<!-- pesan -->
+<div class="bg-info blank" [ngClass]="_datas.classes">
+  {{_datas.isiPesan}}
+</div>
+
+<!-- konfirmasi -->
+<div class="bg-secondary col-md-4 col-xs-12" [ngClass]="_datas.konfirmasi">
+ {{_datas.isiPesan}}
+  <hr>
+  <button class="btn btn-danger btn-sm" (click)="_datas.correct()">Ya</button>
+  <button class="btn btn-primary btn-sm" (click)="_datas.tutup()">Tidak</button>
+</div>
+
+<!-- detil siswa -->
+<div class="back-detil" *ngIf="_datas.detail">
+  <div class="detil animated bounceInDown col-md-5 col-xs-12">
+    <app-detail></app-detail>
+  </div>
+</div>
+
+
+<!-- peta -->
+<div class="back-detil" *ngIf="_datas.showMap">
+  <div class="animated bounceInDown col-md-11 col-xs-12" style="position: absolute;top:58px;background: white;margin: 0 auto;left: 0;right: 0;height: 90%;" (click)="tombolPeta = true">
+    <app-map-box *ngIf="!_datas.mapError" ></app-map-box>
+    <app-map-google *ngIf="_datas.mapError" ></app-map-google>
+    <!-- untuk tombol peta -->
+    <div class="dialogPeta  animated bounceInRight" *ngIf="tombolPeta" >
+      <b>Pastikan alamat di titik yang di tunjuk tampil dulu</b> <br>
+    <button type="button" class="btn btn-sm btn-danger float-right" (click)="tombolPeta = false; _datas.showMap = false; _datas.petaKonfirm = true" *ngIf="!_datas.statusAdmin">Ya! Alamat sudah benar</button>
+    <button type="button" class="btn btn-sm btn-danger float-right" (click)="tombolPeta = false; _datas.showMap = false;" *ngIf="_datas.statusAdmin">Ya! Alamat sudah benar</button>
+    <div>
+
+  </div>
+</div>
+
+

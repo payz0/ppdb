@@ -1,0 +1,35 @@
+<b style="font-size: 11pt">Pilih Alamat anda di peta</b><i style="font-size: 7pt">( Titik koordinat {{lat}} : {{lng}} )</i>
+<div class="map-wrapper">
+	<agm-map  [latitude]="lat" [longitude]="lng" 
+	(mapClick)="pilihPeta($event)" 
+	[zoom]="zoom"   
+	[disableDefaultUI]="false"
+  	[zoomControl]="true">
+	
+	  <agm-marker 
+      [latitude]="lat"
+      [longitude]="lng"
+      [markerDraggable]="true"
+      (dragEnd)="pilihPeta($event)"
+      >
+      <agm-info-window [isOpen]="draggable">
+        <!-- <br>(Jarak ke sekolah {{_datas.jarakPeta}}) -->
+      		<strong>Posisi Alamat :{{_datas.getAlamat}} </strong>
+    	</agm-info-window>
+	  </agm-marker>
+
+	  <agm-marker 
+      [latitude]="lat1"
+      [longitude]="lng1"
+      [markerDraggable]="false"
+      >
+      <agm-info-window  [isOpen]="true" *ngIf="!_datas.petaSiswa">
+      		<strong>{{_datas.sekolah.sekolah}}</strong>
+    	</agm-info-window>
+      <agm-info-window  [isOpen]="true" *ngIf="_datas.petaSiswa">
+          <strong>{{_datas.detail_siswa.nama}}</strong>
+      </agm-info-window>
+	  </agm-marker>
+	
+	</agm-map>
+</div>

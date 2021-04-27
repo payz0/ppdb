@@ -1,0 +1,35 @@
+table{
+	line-height: 0.3pt !important;
+    font-size: 9pt !important;
+}
+
+table td{
+	vertical-align: middle !important;
+	padding: 3pt !important;
+}
+
+table td button{
+	font-size: 8pt !important;
+    line-height: 1em;
+}
+
+table tr:hover{
+	background-color: rgba(146, 214, 226, 0.6784313725490196) !important;
+    color: rgb(111, 80, 3) !important;
+}
+
+
+.btn {
+	border-radius: 0px !important;
+	font-size: 9pt !important;
+}
+
+.bg-success{
+	/*background-color:rgba(107, 107, 107, 0.1)!important;*/
+	background-color: rgba(168, 164, 181, 0.61)!important;
+    color: rgb(112, 39, 119) !important;
+}
+
+.content{
+	overflow-y: hidden !important;
+}

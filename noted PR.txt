@@ -1,0 +1,36 @@
+
+1. merubah ukuran foto pasca di upload => ok di folder yang berbeda
+4. pengaturan tutup untuk disable form daftar
+5. form tambahan admin untuk menentukan :
+	c. harunya api token
+
+NEW
+deteck admin sedang online saat chat => clear ok
+
+data admin ada di 
+1. app
+2. setting profil
+3. setting config
+4. info
+
+
+package json yg dihapus
+=========
+   // "animations": "0.0.0",
+    "bootstrap": "^4.2.1",
+    "core-js": "^2.4.1",
+    "cors": "^2.8.5",
+    // "excel4node": "^1.7.0",
+    // "express-fileupload": "^1.1.1-alpha.3",
+    "file-saver": "^2.0.1",
+    "i": "^0.3.6",
+    // "jquery": "^3.3.1",
+    "mapbox-gl": "^0.53.1",
+    // "mongoose": "^5.4.15",
+    "ngx-filter-pipe": "^2.1.2",
+    "npm": "^6.9.0",
+    "rxjs": "^5.5.6",
+    // "sharp": "^0.22.1"
+
+    cli json
+    "../node_modules/jquery/dist/jquery.js",

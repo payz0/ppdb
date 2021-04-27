@@ -1,0 +1,66 @@
+<div class="row isi-route">
+	<div class="col-xl-6 ">
+		<b class="float-right badge badge-pill badge-secondary">Konfigurasi</b>
+		<hr>
+		<div class="form-isi">
+			<label>Informasi</label>
+			<div class="input-group">
+			  <textarea  placeholder="Informasi" rows='3' [disabled]="edit" [(ngModel)]="admin.informasi" style="width:100%; font-size: 9pt"></textarea>
+			</div>
+			<label>Kuota</label>			
+			<input class="form-control" type="text" placeholder="kuota" [disabled]="edit"  [(ngModel)]="admin.kuota">
+			<label>Jabatan</label>
+			<input class="form-control" type="text" placeholder="Yang bertanda tangan (ex. kepala sekolah)" [disabled]="edit"  [(ngModel)]="admin.jabatan">
+			<label>Nama Pejabat</label>
+			<input class="form-control" type="text" placeholder="Nama Pejabat" [disabled]="edit"  [(ngModel)]="admin.nama_pejabat">
+			<label>NIP</label>
+			<input class="form-control" type="number" placeholder="NIP Pejabat" [disabled]="edit"  [(ngModel)]="admin.nip">
+			<label>Tanggal Pelaksanaan</label>
+			<input class="form-control" type="date" placeholder="tanggal ppdb" [disabled]="edit"  [(ngModel)]="admin.tgl_ppdb">
+			<label>Koordinat Sekolah</label>			
+			<input class="form-control" type="text" placeholder="koordinat sekolah" [disabled]="edit"  [(ngModel)]="admin.koordinat" (keyup)="cekPeta()" (focusout)="out_peta()" (focus)="out_peta()" #peta>
+			<label>Syarat</label>
+			<div class="input-group">
+			  <input type="text" class="form-control" placeholder="Syarat" [disabled]="edit" [(ngModel)]="syarat" (keyup.enter)="addSyarat()">
+			  <div class="input-group-append">
+			    <button class="btn btn-secondary btn-sm" type="button" [disabled]="edit" (click)="addSyarat()">Tambah Syarat</button>
+			  </div>
+			</div>
+			<label style="vertical-align: middle;margin-right: 15px;">Pedanftaran PPDB di</label>
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" [disabled]="edit" (checked)="admin.open" name="inlineRadioOptions" id="inlineRadio1" value="true" [(ngModel)]="admin.open">
+			  <label class="form-check-label" for="inlineRadio1">Buka</label>
+			</div>
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" [disabled]="edit" (checked)="admin.open" name="inlineRadioOptions" id="inlineRadio2" value="false" [(ngModel)]="admin.open">
+			  <label class="form-check-label" for="inlineRadio2">Tutup</label>
+			</div>
+		</div>
+		<hr>
+		
+		<button *ngIf ="edit" type="button" class="btn btn-danger btn-sm" (click)="edit = false; dataConfig()">Edit</button>
+
+		<button *ngIf="!edit" type="button" class="btn btn-primary btn-sm" (click)="updateConfig()">Simpan</button>
+		<button *ngIf="!edit" type="button" class="btn btn-danger btn-sm" (click)="edit = true">Batal</button>
+	</div>
+	<div class="col-xl-6">
+		<div class="content" style="font-size: 10pt">
+			<b class="badge badge-pill badge-info">Informasi : </b><br>
+			{{admin.informasi}}
+			<hr>
+			<b class="badge badge-pill badge-info">Syarat - syarat yang di minta :</b><br>
+				<ol>
+					<li *ngFor="let syarat of syarats" style="font-size: 9pt">{{syarat.syarat}} 
+						<span class="float-right" style="cursor: pointer;" (click)='deleteSyarat(syarat)'>&times;</span>
+					</li>
+				</ol>
+			<hr>
+			<b class="badge badge-pill badge-info">Jumlah Kuota :</b><br>
+			{{admin.kuota}} Siswa
+			<hr>
+			<b class="badge badge-pill badge-info">Status PPDB :</b><br>
+			<span *ngIf="admin.open == 'true'">Saat ini pendaftaran PPDB sudah di buka</span>
+			<span *ngIf="admin.open == 'false'">Saat ini pendaftaran PPDB sudah di tutup</span>
+		</div>
+	</div>
+</div>

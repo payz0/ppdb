@@ -1,0 +1,58 @@
+<div class="row isi-route" >
+		<div class="col-xl-6">
+			<b class="float-right badge badge-pill badge-secondary">Edit Form</b>
+			<hr>	
+			<input class="form-control" type="text" placeholder="Field baru" [(ngModel)]="field" (keyup.enter)="tambahField()">
+			<div class="clearfix mb-0">
+				<button type="button" (click)="tambahField()" class="btn btn-primary btn-sm float-right">Tambah</button>
+			</div>
+			<br>
+			<br>
+			<b class="float-right badge badge-pill badge-secondary" >Daftar tambahan input Form</b>
+			<hr>
+			<div class="content" style="background-color: rgba(255, 255, 255, 0.24)">
+				<ol>
+					<li *ngFor = "let field of datas; let i = index" class="animated bounceInDown btn btn-warning btn-sm" style="margin:4px" (click)="hapusField(field)">{{field.field_attr}}</li>
+				</ol>
+			</div>
+		</div>
+		<div class="col-xl-6">
+			<b class="float-right badge badge-pill badge-secondary">Edit Point</b>
+			<hr>
+			<label>Pilihan jarak</label>
+			<select class="form-control" (change)="pilih($event)">
+				<option value="">- Pilih -</option>
+				<option *ngFor="let jarak of zonas; let i = index" value="{{jarak._id}}"> 
+					<!-- <span *ngIf="i < zonas.length-1"> Kurang dari </span>
+					<span *ngIf="i < zonas.length"> Kurang dari </span>
+					<span *ngIf="i == zonas.length-1"> Lebih dari </span>  -->
+					Kurang dari {{jarak.jauh}} m
+				</option>
+			</select>
+			<label>Jarak</label>
+			<input type="number" [(ngModel)]="jarak.jauh" class="form-control" placeholder="jarak dalam meteran">
+			<label>Point</label>
+			<input type="number" [(ngModel)]="jarak.point" class="form-control" placeholder="nilai">
+			<button type="button" class="btn btn-sm btn-danger" (click)="tambahCategory()" *ngIf="!editTomb">Tambah Kategori</button>
+			<button type="button" class="btn btn-sm btn-success" (click)="editCategory()" *ngIf="editTomb">Simpan perbaikan</button>
+			<button type="button" class="btn btn-sm btn-danger" (click)="hapusCategory()" *ngIf="editTomb">Hapus</button>
+
+			
+			<div class="addSchol" *ngIf="_datas.indexSch == 0">
+				<hr>
+				<b>tambah data sekolah baru</b>
+				<input type="text" [(ngModel)]="sekolah.sekolah" class="form-control" placeholder="sekolah">
+				<input type="text" [(ngModel)]="sekolah.username" class="form-control" placeholder="admin">
+				<input type="text" [(ngModel)]="sekolah.password" class="form-control" placeholder="password">
+				<input type="text" [(ngModel)]="sekolah.koordinat" class="form-control" placeholder="koordinat sekolah">
+				<button type="button" class="btn btn-primary btn-sm" (click)="tambahSekolah()">tambah</button>
+				<button type="button" class="btn btn-primary btn-sm" (click)="rubahSekolah()" *ngIf="updeter">update</button>
+
+				<ul>
+					<li *ngFor="let ad of admins" (click)="editSekolah(ad); updeter = true">{{ad.sekolah}}
+						<span (click)="hapusSekolah(ad._id)" style="float: right; cursor: pointer;display: none;">x</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>

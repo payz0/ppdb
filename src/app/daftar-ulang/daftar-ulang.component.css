@@ -1,0 +1,49 @@
+table	td {
+	padding: 0px;
+	font-size:10pt;
+}
+
+.inputan{
+	border:0px; vertical-align: middle;
+}
+
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+
+    .print{
+    	display: block !important;
+    	text-align: right;
+    }
+}
+
+.print{
+	display: none
+}
+
+.cek{
+	background: rgba(31, 33, 47, 0.9803921568627451);
+    padding: 10px;
+    position: absolute;
+    margin: 0 auto;
+    /*width: 34%;*/
+    left: 0px;
+    right: 0px;
+    box-shadow: 2px 4px 3px 0px black;
+    top: 70%;
+}
+
+.back-cek{
+	width: 100%;
+    height: 100%;
+    background: white;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    padding: 110px;
+}
+
+@page { size:8.5in 13in; margin: 1cm }

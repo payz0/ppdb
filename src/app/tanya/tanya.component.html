@@ -1,0 +1,47 @@
+<div class="row isi-route" #fokus>
+	<div class="" style="color:black; font-size: 10pt; width: 100%">
+		<b class="btn btn-secondary btn-sm" *ngIf="!_datas.chatAdmin">Tanyakan ke panitia</b>	
+		<button *ngIf="!_datas.chatOpen" type="button" class="btn btn-danger btn-sm" (click)="exitChat()" >Exit</button>
+		<hr>
+		<div class="row">
+			<div class="col-md-10 chat col-xs-9" #scrollMe [scrollTop]="scrollMe.scrollHeight" *ngIf="!_datas.chatOpen || _datas.chatAdmin">
+					<div *ngFor="let pesan of allChat" class="animated" [ngClass]="( pesan.nopes == siswaChat.NoPes) ? 'list-chat-kanan bounceInRight' : 'list-chat animated bounceInLeft' ">
+						<img [attr.src]="pesan.foto" [ngClass]=" (pesan.nopes == siswaChat.NoPes) ? 'img-chat-kanan': 'img-chat' " >
+						<p style="position: absolute;color: rgb(69, 61, 160);font-weight: 800;top: -11px;left: 6px;font-size: 6pt;"*ngIf="pesan.nopes !=siswaChat.NoPes">
+							<b *ngIf="pesan.user == 'siswa' ">
+								{{pesan.nama}} [{{pesan.nopes | number:'3.0-2'}}]
+							</b>
+							<b *ngIf="pesan.user == 'admin' ">
+								<b class="badge badge-pill badge-danger" style="font-size: 8pt">Panitia</b>
+							</b>
+						</p>
+
+						<p style="position: absolute;color: rgb(69, 61, 160);font-weight: 800;top: -10px;right: 23px;font-size: 6pt;" *ngIf="pesan.nopes == siswaChat.NoPes">
+							Anda
+						</p>
+						{{pesan.chat}}
+						<i class="waktu">
+							{{pesan.tgl | date:"HH:mm"}}
+						</i>
+					</div>
+			</div>
+			<div class="col-md-2 col-xs-3" style="height:280px;overflow: scroll;">
+				<b>Online chat</b>
+				<ul>
+					<li *ngFor="let guest of allGuest" class="guest-list">
+					<img [attr.src]="guest.foto" style="width: 25px;height: 25px;border-radius: 40px;border: 1px inset rgb(226, 226, 226);" >
+					{{guest.nama}}
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="input-group">
+				<input class="form-control" type="text" [(ngModel)]="chat" (keyup.enter)="kirim()" placeholder="Chat di sini" (click)="loginFirst()" [disabled]="_datas.dariTanyaComponent">
+				<div class="input-group-append">
+					<button class="btn btn-secondary btn-sm" (click)="kirim()" type="button">Pesan</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

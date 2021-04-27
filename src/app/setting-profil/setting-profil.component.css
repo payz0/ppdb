@@ -1,0 +1,9 @@
+.form-isi label{
+	font-size: 8pt;
+	line-height:0px;
+}
+
+input{
+	margin-top: -4px !important;
+    margin-bottom: -5px !important;
+}

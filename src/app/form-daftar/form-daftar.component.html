@@ -1,0 +1,183 @@
+
+<div class="form-registrasi" *ngIf="_datas.sekolah.open">
+	<!-- <b  class="btn btn-secondary btn-sm">Form Pendaftaran</b> -->
+	<div class="form-isi row" *ngIf="!daftarKonfirm">
+		<div class="animated fadeIn container-fluid" *ngIf="halaman == 0">
+			<div class="jenis animated" [ngClass]="jenisEfek ? 'shake bg-warning':'' " (click)="offJenis()">
+				<label style="font-size: 12pt">Jalur :</label>
+				<div class="form-check form-check-inline" style="font-size: 9pt;padding-left:5px" >
+									  <input class="form-check-input" type="radio" [(ngModel)]=" jalurPrestasi" id="jalur3" value='tidak' name="jalur">
+									  <label class="form-check-label" for="jalur3" >Reguler (Zonasi)</label>
+				</div>
+				<div class="form-check form-check-inline" style="font-size: 9pt;" >
+									  <input class="form-check-input" type="radio" [(ngModel)]=" jalurPrestasi" id="jalur4" value='ya' name="jalur">
+									  <label class="form-check-label " for="jalur4" >Prestasi</label>
+				</div>
+			</div>
+
+			<label>Nama Lengkap</label>
+			<input class="form-control" type="text" placeholder="Nama Siswa" [(ngModel)]="registrasi.nama"(keyup)="cekJenis()">
+
+			<label for="">Jenis Kelamin :</label>
+			<div class="form-check form-check-inline" style="font-size: 9pt;padding-left:5px">
+				<input class="form-check-input" type="radio" [(ngModel)]="registrasi.sex" id="inlineRadio1" value="Laki-laki">
+				<label class="form-check-label" for="inlineRadio1">Laki-Laki</label>
+			</div>
+			<div class="form-check form-check-inline" style="font-size: 9pt;">
+				<input class="form-check-input" type="radio" [(ngModel)]="registrasi.sex" id="inlineRadio2" value="Perempuan">
+				<label class="form-check-label" for="inlineRadio2">Perempuan</label>
+			</div>
+			<br>
+
+			<label>	NISN</label>
+			<input class="form-control" type="text" placeholder="NISN" [(ngModel)]="registrasi.nisn" (change)="cek_nisn()" (focusout)="out_nisn()" (keyup)="nisnDouble = false">
+			<span class="nisn animated bounce" *ngIf="nisnDouble">{{pesanNisn}}</span>
+								
+			<label>Sekolah Asal</label>
+			<input class="form-control" type="text" placeholder="Sekolah Asal" [(ngModel)]="registrasi.sekolah" >
+								
+			<label>Tanggal Lahir</label>
+			<input class="form-control" type="date" placeholder="Tgl Lahir" [(ngModel)]="registrasi.tgl" (change)="tgl($event)" [disabled]="disableTgl">
+								
+			<label>Tempat Lahir</label>
+			<input class="form-control" type="text" placeholder="Tempat Lahir" [(ngModel)]="registrasi.tempat" >
+								
+			<label>Telp. / HP</label>
+			<input class="form-control" type="text" placeholder="No Handphone" [(ngModel)]="registrasi.hp" >
+								
+			<!-- <label>Alamat</label> -->
+			<button class="btn btn-sm btn-primary" (click)="_datas.showMap = true"><span *ngIf="_datas.coord_lng == undefined">Klik cari</span> alamat di peta
+				<span *ngIf="_datas.coord_lng != undefined">: {{registrasi.koordinat}}</span>
+			</button>
+								 <input class="form-control" type="text" placeholder="Alamat" [(ngModel)]="registrasi.alamat" (keyup)="petaAlamat()" [disabled]="true">
+								 
+								 
+			<!-- agama -->
+			<label>Agama</label>
+			<select class="form-control" [(ngModel)]="registrasi.agama">
+			  	<option value="">-Pilih Agama-</option>
+			  	<option value="Islam">Islam</option>
+			  	<option value="Protestan">Protestan</option>
+			  	<option value="Katolik">Katolik</option>
+			  	<option value="Hindu">Hindu</option>
+			  	<option value="Budha">Budha</option>
+			  	<option value="Lainnya">Lainnya</option>
+			</select>
+		</div>
+		<!-- next page -->
+		<div class="animated fadeIn container-fluid" *ngIf="halaman >=1 ">
+
+			<!-- looping custom -->
+			<!-- revisi untuk smp 1 aja -->
+			<!-- <input class="form-control" type="text" *ngFor = "let f of fields | slice:dari_field:sampai_field" placeholder="{{f.field_attr}}" [(ngModel)]="registrasi[f.field_db]"> -->
+			<div *ngFor = "let f of fields | slice:dari_field:sampai_field">
+				<label for="">{{f.field_attr}}</label>
+				<input class="form-control" type="text"  placeholder="{{f.field_attr}}" [(ngModel)]="registrasi[f.field_db]">
+			</div>
+			<!-- upload foto -->
+			<img [attr.src]="url_foto" *ngIf="imgFoto" class="imgUpload"/>
+			<label for="upload" class="btn btn-secondary btn-sm" *ngIf="hiddenTombol">
+				<i class="fas">	&#xf030;</i> Pas Foto Siswa</label>
+			<input type="file" id="upload" style="display: none" (change)="uploadFoto($event)" >
+			<br>
+			<!-- <label for="upload1" class="btn btn-secondary btn-sm" *ngIf="hiddenTombol && !tombUpload">
+				<i class="fas">	&#xf030;</i> Upload Raport</label>
+			<input type="file" id="upload1" style="display: none">
+			<br> -->
+			<img [attr.src]="url_prestasi" *ngIf="imgPrestasi && tombUpload" class="imgUpload"/>
+			<label for="upload2" class="btn btn-secondary btn-sm" *ngIf="hiddenTombol && tombUpload">
+				<i class="fas">	&#xf030;</i> Upload sertifikat prestasi</label>
+			<input type="file" id="upload2" style="display: none" (change)="uploadPrestasi($event)">
+
+		</div>
+	</div>
+	<div class="container-fluid">
+		<button class="btn btn-info btn-sm" (click)="prev();disableTgl = false" *ngIf="halaman > 0">
+			<i class="fas">&#xf100;</i>
+			Kembali
+		</button>
+		<button class="btn btn-info btn-sm float-right" (click)="next()" *ngIf="!hiddenTombol">
+			Lanjut
+			<i class="fas">&#xf101;</i>
+		</button>
+		<button class="btn btn-danger btn-sm float-right" (click)="konfirmKirim(); prestasiKonfirm = false" *ngIf="hiddenTombol">
+			Kirim Data
+			<i class="fas">&#xf1d8;</i>
+		</button>
+	</div>
+</div>
+
+<!-- konfirmasi -->
+<div class="begron" *ngIf="daftarKonfirm">
+  <div class="bg-secondary konfirmasi animated bounceInDown col-md-4 col-xs-12" >
+	 <span *ngIf="globalNisn < 2 || dataKosong">{{_datas.isiPesan}}</span>
+	 <span *ngIf="globalNisn >=2 && !dataKosong">Maaf... !!</span>
+	 <!-- !prestasiKonfirm && -->
+	 <ul class="cek-ul" *ngIf="globalNisn < 2 || dataKosong">
+	 	<li *ngIf="registrasi.nama == null"> <i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>   Nama siswa belum di isi</li>
+	 	<li *ngIf="registrasi.nisn == null || nisnDouble">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>
+	 		NISN
+	 		<span *ngIf="nisnDouble">sudah terdaftar  / tidak benar</span>
+	 		<span *ngIf="!nisnDouble">belum di isi</span>
+	 	</li>
+	 	<li *ngIf="registrasi.sex == null">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Jenis kelamin belum di isi</li>
+	 	<li *ngIf="registrasi.sekolah == null">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Nama sekolah  belum di isi</li>
+	 	<li *ngIf="registrasi.tgl == null">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Tanggal kelahiran belum di isi</li>
+	 	<li *ngIf="registrasi.tempat == null">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Tempat Lahir belum di isi</li>
+	 	<li *ngIf="registrasi.hp == null">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Nomor HP belum di isi</li>
+	 	<li *ngIf="registrasi.alamat == null">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Alamat siswa belum di isi</li>
+	 	<li *ngIf="registrasi.agama == ''">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Agama belum di isi</li>
+	 	<span *ngFor = "let fi of fields">
+	 		<li *ngIf="registrasi[fi.field_db] == null"><i class="fas" style="color:yellow; margin-right: 4px;">&#xf05a;</i>{{fi.field_attr}} belum di isi</li>
+	 	</span>
+	 	<li *ngIf="!imgFoto">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Foto belum ada
+	 	</li>
+	 	<li *ngIf="!imgPrestasi && jalurPrestasi == 'ya'">
+	 		<i class="fas" style="color:red; margin-right: 4px;">&#xf071;</i>Berkas prestasi belum di upload
+	 	</li>
+	 </ul>
+	 <div class="no" *ngIf="globalNisn >=2 ">
+	 	<b>Anda terdeteksi sudah terdaftar di dua sekolah</b>
+	 </div>
+	  <hr>
+	  <div *ngIf="!prestasiKonfirm">
+		  <button class="btn btn-danger btn-sm" (click)="daftar(); daftarKonfirm = false" *ngIf="!dataKosong && globalNisn < 2">Ya, Kirim data</button>
+		  <button class="btn btn-primary btn-sm" (click)="daftarKonfirm = false; dataKosong = false">
+		  	<span *ngIf="!dataKosong && globalNisn >= 2" (click)="registrasi = {}">Maaf</span>
+		  	<span *ngIf="!dataKosong && globalNisn < 2">Tidak</span>
+		  	<span *ngIf="dataKosong">Perbaiki</span>
+		  </button>
+	  </div>
+	  <div *ngIf="prestasiKonfirm">
+	  	  <!-- <button class="btn btn-danger btn-sm" (click)="daftarKonfirm = false; prestasiKonfirm = false">Ya saya berprestasi</button> -->
+	  	   <button class="btn btn-primary btn-sm" (click)="daftarKonfirm = false; tombUpload = false; prestasiKonfirm = false">Tidak</button>
+	  </div>
+	</div>
+</div>
+
+  <div class="begron" *ngIf="_datas.petaKonfirm">
+	<div class="bg-secondary konfirmasi animated bounceInDown col-md-4 col-xs-12">
+		<div class="tes">
+			<b>Yakin alamat anda sudah benar ?</b> <br>
+			<button type="button" class="btn btn-sm btn-primary" (click)="konfirmPeta(); _datas.petaKonfirm = false; inputDisabled = false">Yakin</button>
+			<button type="button" class="btn btn-sm btn-info" (click)="_datas.showMap = true;  _datas.petaKonfirm = false">Cek lagi</button>
+		</div>
+	</div>
+  </div>
+
+     <!-- kondisi tutup -->
+        <div class="tutup" *ngIf="!_datas.sekolah.open">
+          <div class="tutupBody animated swing" *ngIf="_datas.sekolah.open != undefined">
+            <h2>Maaf sudah di tutup</h2>
+          </div>
+        </div>
+    <!-- batas tutup -->

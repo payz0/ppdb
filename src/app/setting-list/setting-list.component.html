@@ -1,0 +1,70 @@
+<div class="row isi-route" >
+	
+	<div class="content table-responsive ">
+		<input type="text" [(ngModel)] = "cek.nama" style="width: 60%; font-size: 9pt;padding: 5px;" placeholder="Cari Siswa">
+		<select (change)="jumlah($event)" class="form-control" style="width: 65px;float: left;">
+			<option value="" selected>-Pilih-</option>
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="25">25</option>
+			<option value="1000">Semua</option>
+		</select>
+		<div class="float-right">
+			<i class="badge badge-pill badge-warning">{{juml_siswa}} Siswa, {{juml_konfirm}} konfirmasi</i>
+			<button  class="btn btn-info btn-sm" (click)="downloadExcel()"> Download </button>
+			<button class="btn btn-info btn-sm" (click)="konfirm()">Konfirmasi</button>
+			<button class="btn btn-info btn-sm " (click)="delete()" style="display: none;">Delete</button>
+		</div>
+		
+		<table class="table table-bordered ">
+			<thead class="thead-light">
+				<tr style="text-align: center">
+					<th style="max-width: 7px">No.</th>
+					<th style="max-width: 45px; cursor: pointer;" (click)="urutSort('NoPes')">NO.Pes</th>
+					<th style="cursor: pointer;" (click)="urutSort('nama')">Nama</th>
+					<th>NISN</th>
+					<th>L/P</th>
+					<th>Sekolah Asal</th>
+					<th>Agama</th>
+					<th>Terdaftar di</th>
+					<th style="cursor: pointer;" (click)="urutSort('jarak')">Zona</th>
+					<th style="cursor: pointer;" (click)="urutSort('total')">Nilai</th>
+					<th  style="max-width: 12px">Prestasi</th>
+					<th>Ket</th>
+					<th style="max-width: 8px">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor = "let data of (datas | filterBy : cek)  | slice:dari_data:sampai_data ; let i = index" class="table-Secondary" [ngClass]="data.konfirm ? 'bg-success': '' ">
+					<td style="text-align: center; ">{{i+1}}</td>
+					<td style="text-align: center; " >{{data.NoPes | number:'3.0-2'}}</td>
+					<td>{{data.nama}}</td>
+					<td>{{data.nisn}}</td>
+					<td>{{data.sex}}</td>
+					<td>{{data.sekolah}}</td>
+					<td>{{data.agama}}</td>
+					<td>{{data.lainSekolah}} </td>
+					<td>{{data.jarak}} Km</td>
+					<td>{{data.total}}</td>
+					<td style="text-align: center;">
+						<i class="fas badge badge-pill badge-primary" *ngIf="data.UpSertifikat != null">&#xf00c; Yes</i> 
+						<i class="fas badge badge-pill badge-secondary" *ngIf="data.UpSertifikat == null">&#xf111; No</i> 
+					</td>
+					<td>{{data.ket}}</td>
+					<td style="text-align: center;">
+						<button type="button" class="btn btn-danger btn-sm" (click)="detailSiswa(data)">detail</button>
+						
+						<!-- <button class="btn btn-info btn-sm" (click)="lulus = !lulus" *ngIf="lulus">lulus</button>
+						<button class="btn btn-secondary btn-sm" (click)="lulus = !lulus" *ngIf="!lulus">tdk lulus</button> -->
+
+						<input type="checkbox" (change)="pilih($event)" value="{{data._id}}" 
+						[checked]="data.konfirm" class="float-right">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="hal">
+			<button  *ngFor='let in of counter() ;let i = index' type="button" class="btn" (click)="pagination(i)" [ngClass]="pages == i ? 'btn-secondary':'btn-primary'">{{i+1}}</button>
+		</div>
+	</div>
+</div>

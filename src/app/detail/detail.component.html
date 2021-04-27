@@ -1,0 +1,253 @@
+<div *ngIf="!_datas.detail_cetak && !_datas.cetak_kartu">
+      <b style="width: 100%;
+          background-color: rgb(61, 61, 138);
+          position: absolute;
+          color: white;
+          padding: 4px;
+          top: 0px;
+          left: 0px;
+          font-size: 10pt;">Detail Data Siswa
+        <span class="float-right " style="cursor: pointer;" (click)="_datas.detail = false">&times;</span>
+        <span style="margin-left: 10px">[ {{_datas.detail_siswa.NoPes | number:'3.0-2'}} ]</span>
+        
+      </b>
+      <hr>
+        <table style="width: 100%; font-size: 9pt">
+          <tbody>
+            <tr>
+              <td colspan="3" >
+                <div *ngIf="_datas.petaSiswa" class="petaSiswa" >
+                  <button type="button" class="btn btn-sm btn-danger float-right" (click)="_datas.petaSiswa = false; aktif_simpan = false" style="font-size: 9pt">Tutup</button>
+
+                  <button type="button" class="btn btn-sm btn-info float-right" (click)="_datas.petaSiswa = false; updatePeta()" style="font-size: 9pt; margin-right: 4px">Edit</button>
+                  
+                  <app-map-box *ngIf="_datas.mapError"></app-map-box>
+                  <app-map-google *ngIf="!_datas.mapError"></app-map-google>
+                </div> 
+              </td>
+            </tr>
+            <tr>
+              <td style="min-width: 102px;">Reg Date</td><td>:</td><td>{{_datas.detail_siswa.tgl_reg | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
+            </tr>
+            <tr>
+              <td style="min-width: 102px;">Nama</td><td>:</td><td>{{_datas.detail_siswa.nama}}</td>
+            </tr>
+             <tr>
+              <td style="min-width: 102px;">No.Peserta</td><td>:</td>
+              <td>
+                  <span *ngIf="!edit_nopes" (dblclick)="edit_nopes = true; aktif_simpan = true">
+                    {{_datas.detail_siswa.NoPes}}
+                  </span>
+                  <span *ngIf="_datas.detail_siswa.NoPes == 0 || edit_nopes">
+                      <input type="text" [(ngModel)]="nilai.NoPes" class="form-control" placeholder="Nomor peserta siswa" (focusout)="out_nopes()">
+                  </span>
+              </td>
+            </tr>
+            <tr>
+              <td>NISN</td><td>:</td>
+              <td>
+                  <span *ngIf="!nisn_rev" (dblclick)="nisn_rev = true; aktif_simpan = true">
+                  {{_datas.detail_siswa.nisn}}
+                  </span>
+                  <span *ngIf="nisn_rev">
+                    <input type="text" [(ngModel)]="nilai.nisn" class="form-control" placeholder="NISN siswa">
+                  </span>
+              </td>
+            </tr>
+            <tr>
+              <td>Jenis Kelamin</td><td>:</td><td>{{_datas.detail_siswa.sex}}</td>
+            </tr>
+            <tr>
+              <td>TTL</td><td>:</td><td>{{_datas.detail_siswa.tempat}}, {{_datas.detail_siswa.tgl | date}}</td>
+            </tr>
+            <tr>
+              <td>No. HP</td><td>:</td><td>{{_datas.detail_siswa.hp}}</td>
+            </tr>
+            <tr>
+              <td>Alamat</td><td>:</td><td>{{_datas.detail_siswa.alamat}}
+                <button type="button" class="btn btn-sm btn-primary" (click)="_datas.petaSiswa = true" style="padding: 3px;font-size: 9pt;">Peta</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Agama</td><td>:</td><td>{{_datas.detail_siswa.agama}}</td>
+            </tr>
+            <tr>
+              <td>Koordinat</td><td>:</td><td>
+                  <span >{{_datas.detail_siswa.koordinat}}</span>
+                  <!-- <span >{{_datas.coord_lng}} dan {{_datas.coord_lat}}</span> -->
+              </td>
+            </tr>
+            <tr>
+              <td>Jarak rumah</td><td>:</td><td>{{_datas.detail_siswa.jarak}} Km</td>
+            </tr>
+            <tr>
+              <td>Double daftar</td><td>:</td>
+              <td>
+                <span *ngIf="_datas.detail_siswa.otherSch != null">Ya</span>
+                <span *ngIf="_datas.detail_siswa.otherSch == null">Tidak</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Point Raport</td>
+              <td>:</td>
+              <td>
+                <input type="number" (keyup)=" getNilai()" placeholder="Raport" class="form-control" [(ngModel)]="nilai.raport" >
+              </td>
+            </tr>
+            <tr *ngIf="_datas.detail_siswa.UpSertifikat != null">
+              <td>Point Prestasi</td>
+              <td>:</td>
+              <td>
+                <input type="number" (keyup)=" getNilai()" placeholder="Prestasi" class="form-control" [(ngModel)]="nilai.prestasi" >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Document
+              </td> 
+              <td>:</td>
+              <td>
+                <button style="font-size: 7pt;padding: 2px;" type="button" class="btn btn-sm btn-danger" *ngIf="_datas.detail_siswa.UpSertifikat != null" (click)="show_gambar = true"> <i class="fas">&#xf00c;</i> Detail</button> 
+                <i class="fas" *ngIf="_datas.detail_siswa.UpSertifikat == null">&#xf111; - none -</i> 
+              </td>  
+            </tr>
+            <tr >
+              <td>Total point</td> 
+              <td>:</td>
+              <td>jumlah point {{nilai.total}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <div class="container ">
+          <button type="button" class="btn btn-danger btn-sm float-right" (click)="_datas.detail = false; aktif_simpan = false" style="font-size: 9pt">Tutup</button>
+          <button type="button" class="btn btn-primary btn-sm float-right" style="font-size: 9pt" (click)="simpan();_datas.detail = false" >Simpan</button>
+          <!-- <button type="button" class="btn btn-primary btn-sm float-right" style="font-size: 9pt" (click)="updatePeta();_datas.detail = false" *ngIf="simpanPeta" >Simpan</button> -->
+
+        </div>
+</div>
+<!-- show gambar sertifikat -->
+<div *ngIf="show_gambar">
+  <img src="{{_datas.baseUrl}}/sertifikat/{{_datas.detail_siswa.UpSertifikat}}" 
+  (click)="show_gambar = false" class="animated zoomIn"
+  style=" position: absolute;top: -4%;right: 25%;margin: 0 auto;left: -25%;width: 150%;">
+</div>
+<!-- cetak konfirmasi -->
+<div *ngIf="_datas.detail_cetak ">
+  <!-- jika konfirmasi dari home componen -->
+  <div *ngIf="_datas.dariHomeComponent">
+   <b style="position: absolute;
+      margin-top: -23px;
+      background-color: rgb(62, 100, 134);
+      width: 100.5%;
+      left: -1px;
+      padding: 1px 15px;
+      color: white;
+      font-size: 9pt;
+      z-index: -9;
+      ">
+    Cetak Kartu
+    <span class="float-right" style="cursor: pointer;" (click)="_datas.detail = false; _datas.detail_cetak = false">&times;</span>
+    </b>
+    
+    <table  width="100%">
+        <tr>
+          <td style=" display: inline-block;">
+            <img src="{{_datas.baseUrl}}/foto/{{_datas.detail_siswa.UpFoto}}"
+            style="width: 100px;border: 1px solid grey;height: 100px;" >
+          </td>
+          <td style="font-size: 9pt">
+            <ul style="list-style: none;     margin-left: -35px;">
+              <li><b>{{_datas.detail_siswa.nama | uppercase}}</b></li>
+              <li>No. Peserta : {{_datas.detail_siswa.NoPes | number:'3.0-1'}}</li>
+              <li>Dari : {{_datas.detail_siswa.sekolah | uppercase }}</li>
+              <li>Tgl Reg : {{_datas.detail_siswa.tgl_reg | date: 'dd-MM-yyyy HH:mm:ss'}}</li>
+              <li>
+                 <input type="number" [(ngModel)]="nisnCetak" placeholder="isi nisn untuk cetak kartu" class="form-control" (keyup.enter) = "cetakKartu()">
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+              <button type="button" class="btn btn-sm btn-primary float-right" (click)="cetakKartu()">Cetak Kartu</button>
+          </td>
+        </tr>
+    </table>
+  </div>
+  <!-- jika chat mau aktif -->
+  <div class="pe" *ngIf="_datas.dariTanyaComponent">
+    <input type="number" [(ngModel)]="nisnChat" placeholder="isi nisn untuk Chat" class="form-control" (keyup.enter) = "chatSiswa()">
+    <button type="button" class="btn btn-primary btn-sm" (click)="chatSiswa()">Masuk</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="_datas.detail = false; _datas.dariTanyaComponent = false">Batal</button>
+  </div>
+
+</div>
+
+<!-- cetak kartu -->
+<div style="background-color: white;
+          margin: 0px auto;
+          font-size: 9pt;"
+          class="animated fadeIn" *ngIf="_datas.cetak_kartu">
+
+    <button (click)="print()" type="button" class="btn btn-sm btn-danger hidden-print" 
+            style="position: absolute; bottom: -22px;font-size: 9pt;right: 48px;">
+            <i class="fas"> &#xf02f;</i>  Print</button>
+    <button (click)="_datas.cetak_kartu = false; _datas.detail = false" type="button" class="btn btn-sm btn-primary hidden-print" style="position: absolute; bottom: -22px;font-size: 9pt;right: 0px;">Batal</button>
+
+    <table style="width: 100%">
+            <tr style="border-bottom: 1px solid black">
+              <td style="vertical-align: middle;text-align: center;">
+                 <img src="{{_datas.baseUrl}}/images/{{_datas.sekolah.logo}}" alt="" style="width: 60px;height: 60px;margin-top:-15px;">
+              </td>
+              <td colspan="2" style="vertical-align: top; line-height: 1;text-align: center;">
+                <b style="font-size: 9pt;">Kartu Calon Peserta Didik</b><br>
+                <b style="font-size: 8pt">Tahun Ajaran : {{_datas.tahunAjaran}} </b><br>
+                <b style="font-size: 11pt;">{{_datas.sekolah.sekolah | uppercase}}</b><br>
+                <i style="font-size: 7pt;">Alamat : {{_datas.sekolah.alamat}}</i><br>
+                <i style="font-size: 7pt;">Email : {{_datas.sekolah.email}}</i>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid black">
+              <td colspan="3" style="text-align: center"><b>No peserta : [ {{_datas.detail_siswa.NoPes | number:'3.0-2'}} ]</b></td>
+            </tr>
+            <tr>
+              <td>Nama</td><td>:</td><td>{{_datas.detail_siswa.nama}}</td>
+            </tr>
+            <tr>
+              <td>NISN</td><td>:</td><td>{{_datas.detail_siswa.nisn}}</td>
+            </tr>
+            <tr>
+              <td>Jenis Kelamin</td><td>:</td><td>{{_datas.detail_siswa.sex}}</td>
+            </tr>
+            <tr>
+              <td>TTL</td><td>:</td><td>{{_datas.detail_siswa.tempat}}, {{_datas.detail_siswa.tgl | date: 'dd MMMM yyyy'}}</td>
+            </tr>
+            <tr>
+              <td>No. HP</td><td>:</td><td>{{_datas.detail_siswa.hp}}</td>
+            </tr>
+            <tr>
+              <td>Sekolah asal</td><td>:</td><td>{{_datas.detail_siswa.sekolah}}</td>
+            </tr>
+            <tr>
+              <td>Agama</td><td>:</td><td>{{_datas.detail_siswa.agama}}</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                  <img src="{{_datas.baseUrl}}/foto/{{_datas.detail_siswa.UpFoto}}"
+                  style="width: 100px;border: 1px solid grey;height: 100px;" >
+              </td>
+              <td>
+                  <ul style="list-style: none">
+                    <!-- _datas.sekolah.tgl_ppdb  -->
+                    <li>{{_datas.sekolah.kota}}, {{_datas.detail_siswa.tgl_reg | date: 'dd MMMM yyyy'}}</li>
+                    <li>{{_datas.sekolah.jabatan}}</li>
+                    <li> <br></li>
+                    <li> ........</li>
+                    <li><b>{{_datas.sekolah.nama_pejabat | uppercase}}</b></li>
+                    <li>{{_datas.sekolah.nip}}</li>
+                  </ul>
+              </td>
+            </tr>
+    </table>
+</div>

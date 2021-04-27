@@ -1,0 +1,66 @@
+<div class="row isi-route">
+	<div class="col-xl-6">
+		<b class="float-right badge badge-pill badge-secondary">Profil</b>
+		<hr>
+		<div class="form-isi">
+			<label>Username</label>
+			<input class="form-control" type="text" placeholder="Username" [disabled]="edit" [(ngModel)]="admin.username" >
+			<label>Password</label>
+			<input class="form-control" type="password" placeholder="Password" [disabled]="edit" [(ngModel)]="admin.password">
+			<label>Nama Sekolah</label>
+			<input class="form-control" type="text" placeholder="Nama Sekolah" [disabled]="edit" [(ngModel)]="admin.sekolah">
+			<label>Alamat</label>
+			<input class="form-control" type="text" placeholder="Alamat" [disabled]="edit" [(ngModel)]="admin.alamat">
+			<label>Provinsi</label>
+			<input class="form-control" type="text" placeholder="Provinsi" [disabled]="edit" [(ngModel)]="admin.provinsi">
+			<label>Kabupaten</label>
+			<input class="form-control" type="text" placeholder="Kabupaten" [disabled]="edit" [(ngModel)]="admin.kabupaten">
+			<label>Kota</label>
+			<input class="form-control" type="text" placeholder="Nama Kota" [disabled]="edit" [(ngModel)]="admin.kota">
+			<label>email</label>			
+			<input class="form-control" type="text" placeholder="Email" [disabled]="edit" [(ngModel)]="admin.email">
+
+
+		</div>
+		<hr>
+		<div>
+			<button *ngIf="!edit" type="button" class="btn btn-primary btn-sm" (click)="update()" >Simpan</button>
+			<button *ngIf="!edit" type="button" class="btn btn-info btn-sm" (click)="edit = true" >Batal</button>
+			<button *ngIf="edit" type="button" class="btn btn-danger btn-sm" (click)="edit = false; dataAdmin()" >Edit</button>
+		</div>
+	</div>
+	<div class="col-xl-6">
+		<b class="float-right badge badge-pill badge-secondary">Image Web</b>
+		<hr>
+			<div class="card float-left" style="width: 10rem;">
+			  	<img class="card-img-top" [attr.src]="back_foto || foto_default "  style="height: 8rem">
+			   	<label for="upload" class="btn btn-secondary btn-sm" *ngIf="!back_tomb">Background</label>
+			   	<button type="button" class="btn btn-info btn-sm" *ngIf="back_tomb" (click)="upload('latar')">Simpan</button>
+				<input class="form-control" type="file" id="upload" style="display: none" (change)="background($event)"  >
+			</div>
+
+			<div class="card" style="width: 10rem;" >
+			  	<img class="card-img-top " [attr.src]="logo_foto || foto_default"  style="height: 8rem">
+			   	<label for="upload2" class="btn btn-secondary btn-sm" *ngIf="!logo_tomb">Logo</label>
+			   	<button type="button" class="btn btn-info btn-sm" *ngIf="logo_tomb" (click)="upload('logo')">Simpan</button>
+				<input class="form-control" type="file" id="upload2" style="display: none" (change)="logo($event)">
+			</div>
+		<div class="warn">
+			<b class="float-right badge badge-pill badge-secondary">Warna Web</b>
+			<hr>
+				<label>Ganti warna web</label>
+				<select [(ngModel)]="warna" class="form-control" (change)="berubahWarna()">
+					<option value="">-pilih warna-</option>
+					<option value="merah">Merah</option>
+					<option value="ungu">Ungu</option>
+					<option value="jingga">Jingga</option>
+					<option value="biru">Biru</option>
+					<option value="hijau">Hijau</option>
+					<option value="coklat">Coklat</option>
+					<option value="hitam">Hitam</option>
+					<option value="biruTua">Biru Tua</option>				
+				</select>
+				{{warna}}
+		</div>
+	</div>
+</div>

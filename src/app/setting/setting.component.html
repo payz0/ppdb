@@ -1,0 +1,45 @@
+<!-- <div class="row" *ngIf="loginCondition"> -->
+	<div class="row container position-absolute" style="top:-15px; z-index: 9999" *ngIf="loginCondition">
+		<div class="btn-group " role="group" aria-label="Basic example">
+			  <button type="button" class="btn btn-secondary" (click)="setting('profil');">Profil</button>
+			  <button type="button" class="btn btn-secondary" (click)="setting('daftar')">Daftar</button>
+			  <button type="button" class="btn btn-secondary" (click)="setting('redaftar')">Daftar Ulang</button>
+			  <button type="button" class="btn btn-secondary" (click)="setting('config')">Konfigurasi</button>
+			  <button type="button" class="btn btn-secondary" (click)="setting('form')">Advanced</button>
+			  <!-- <button type="button" class="btn btn-secondary" (click)="setting('chat'); _datas.chatAdmin = true;">Pesan</button> -->
+			  <button type="button" class="btn btn-secondary" (click)="logOut()">logout</button>
+		</div>
+	</div>
+
+	<!-- konten -->
+	<div [ngSwitch]="target" *ngIf="loginCondition">
+		<div *ngSwitchCase = "'profil'" class="animated fadeIn switch_route">
+			<app-setting-profil></app-setting-profil>
+		</div>
+		<div *ngSwitchCase = "'daftar'" class="animated fadeIn switch_route">
+			<app-setting-list></app-setting-list>
+		</div>
+		<div *ngSwitchCase = "'redaftar'" class="animated fadeIn switch_route">
+			<app-setting-list-ulang></app-setting-list-ulang>
+		</div>
+		<div *ngSwitchCase = "'config'" class="animated fadeIn switch_route">
+			<app-setting-config></app-setting-config>
+		</div>
+		<div *ngSwitchCase = "'form'" class="animated fadeIn switch_route">
+			<app-setting-form></app-setting-form>
+		</div>
+		<div *ngSwitchCase = "'chat'" class="animated fadeIn switch_route">
+			<app-tanya></app-tanya>
+		</div>
+	</div>
+<!-- </div> -->
+<div class="login col-md-5 col-sm-12 animated" [ngClass]="errorClass ? 'rubberBand' : '' " *ngIf="!loginCondition">
+	<b class="judul-login">Login Admin</b>
+	<label for="">Username</label>
+	<input type="text" class="form-control" [(ngModel)]="admin.user" (keyup.enter)="login()">
+	<label for="">Password</label>
+	<input type="password" class="form-control" [(ngModel)]="admin.pass" (keyup.enter)="login()">
+	<hr>
+	<button type="button" class="btn btn-sm btn-primary" (click)="login()">Login</button>
+	<!-- <button type="button" class="btn btn-sm btn-danger" (click)="">Batal</button> -->
+</div>

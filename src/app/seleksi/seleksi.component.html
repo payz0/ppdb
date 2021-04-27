@@ -1,0 +1,71 @@
+<div class="container-fluid">
+  <!-- <b class="btn btn-secondary btn-sm">Hasil seleksi</b> -->
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="hasil-info col-md-6">
+      <div class="form-group" style="text-align: center" *ngIf="!kertas">
+        <label for="">Masukan NISN dan No peserta untuk melihat hasil seleksi</label>
+        <input type="text" [(ngModel)]="nisn" class="form-control" placeholder="Masukkan NISN">
+        <input type="text" [(ngModel)]="nopes" class="form-control" placeholder="Nomor peserta terdaftar">
+        <button class="btn btn-primary" (click)="submit()" style="margin-top: 11px">Submit</button>
+      </div>
+      <div class="isi-info" *ngIf="kertas">
+        <div class="kop">
+            <img [attr.src]="foto" style="width: 65px">
+          <b>{{info.sekolah | uppercase}}</b>
+          <b>{{info.kabupaten}} - {{info.kota}}</b>
+          <b>{{info.provinsi}}</b>
+          <i>{{info.alamat}} - {{info.email}}</i>
+        </div>
+          <div style="text-align:center;    margin-top: 20px;">
+            <b> IDENTITAS SISWA</b>
+          </div>
+          <table style="    margin-top: 20px;">
+            <tr>
+              <td>Nama</td>
+              <td>:</td>
+              <td>{{dataSiswa.nama}}</td>
+            </tr>
+            <tr>
+              <td>NISN</td>
+              <td>:</td>
+              <td>{{dataSiswa.nisn}}</td>
+            </tr>
+            <tr>
+              <td>TTL</td>
+              <td>:</td>
+              <td>{{dataSiswa.tempat}}, {{dataSiswa.tgl | date :'dd/MM/yyyy'}}</td>
+            </tr>
+            <tr>
+              <td>Sekolah Asal</td>
+              <td>:</td>
+              <td>{{dataSiswa.sekolah}}</td>
+            </tr>
+          </table>
+          <hr>
+          Telah mendaftar di SMP Negeri 1 pada <b><i>tanggal {{dataSiswa.tgl_reg |date :'dd MMMM yyyy'}}</i></b>, berdasarkan hasil seleksi yang sesuai dengan aturan yang berlaku, 
+          maka siswa yang bersangkutan dinyatakan:
+
+          <span class="btn btn-danger" *ngIf="!amplop" (click)="amplop = true">
+            Klik lihat hasil
+          </span>
+          <div class="status" *ngIf="amplop && urutan <= info.kuota && dataSiswa.konfirm">
+              <img src="{{_datas.baseUrl}}/horrey.gif" alt="">
+              <h4>lulus</h4>
+              <i>Posisi no {{urutan}}</i>
+          </div>
+          <div class="status" *ngIf="amplop && urutan > info.kuota || amplop && !dataSiswa.konfirm">
+              <i> Mohon Maaf </i>
+              <h4 style="color:red">Tidak Lulus</h4>
+              <i *ngIf="dataSiswa.ket != undefined">Karena anda {{dataSiswa.ket}}</i>
+              <i *ngIf="dataSiswa.ket == undefined">Karena kuota sudah terpenuhi</i>
+          </div>
+      </div>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+  <div style="text-align: center" *ngIf="amplop && urutan <= info.kuota && dataSiswa.konfirm">
+    <button class="btn btn-primary">Lanjut Daftar Ulang</button>
+    <button class="btn btn-danger" (click)="mundur()">Mengundurkan diri</button>
+  </div>
+</div>

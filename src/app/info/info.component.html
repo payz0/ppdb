@@ -1,0 +1,25 @@
+<div class="row isi-route" >
+	<div class="" style="color:black; font-size: 10pt; width: 100%;">
+		<!-- <b class="btn btn-secondary btn-sm">Informasi PPDB Tahun Ajaran {{_datas.tahunAjaran}}</b>	 -->
+		<!-- <hr> -->
+		<div style="line-height: .2;
+		    text-align: center;
+		    border-bottom: 2px double black;
+		    padding-bottom: 15px;
+		    margin-bottom: 17px;">
+		    <img [attr.src]="foto" style="width: 100px">
+			<h4>{{info.sekolah | uppercase}}</h4>
+			<h5 style="margin-top: -11px">{{info.kabupaten}} - {{info.kota}}</h5>
+			<h4 style="margin-top: -11px">{{info.provinsi}}</h4>
+			<i>{{info.alamat}} - {{info.email}}</i>
+		</div>
+		{{info.informasi}}
+		<br>
+		<br>
+		<b><u>Syarat-syarat yang harus di sertakan :</u></b>
+		<ol>
+			<li *ngFor = "let syarat of syarats">{{syarat.syarat}}</li>
+		</ol>
+
+	</div>
+</div>

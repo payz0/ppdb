@@ -1,0 +1,46 @@
+
+/*.input-group .form-control{
+	width: auto !important;
+}*/
+.switch_route{
+     background: white;
+    box-shadow: 0px 0px 6px -1px #a5a2a2; 
+    padding: 10px;
+}
+.btn {
+	border-radius: 0px !important;
+	font-size: 9pt !important;
+}
+
+.form-isi{
+	border: 2px solid white;
+    padding: 2px;
+}
+
+.login{
+	position: fixed;
+    top: 40px;
+    background-color: #e6e6e6;
+    padding: 30px;
+    margin: 0 auto;
+    left: 0px;
+    right: 0px;
+    color: #6f6f6f;
+    font-size: 9pt;
+    z-index: 9999;
+    box-shadow: 4px 4px 8px 0px #232323;
+}
+
+.judul-login{
+	font-size: 10pt;
+    position: absolute;
+    top: -21px;
+    background-color: #5e5e6d;
+    padding: 7px;
+    border-radius: 15px 15px 15px 0px;
+    color: white;
+    left: 0px;
+    border-bottom: 2px inset rgb(189, 188, 188);
+    border-top: 3px outset rgb(189, 188, 188);
+    border-right: 5px inset rgb(189, 188, 188);
+}
